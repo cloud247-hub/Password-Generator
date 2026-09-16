@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="nb">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#061a2f">
+  <meta name="description" content="Lag tilfeldige passord, passfraser og PIN-koder lokalt i nettleseren med Cloud247. Ingen konto, passordlogging eller eksterne API-er.">
+  <title>Password Generator | Cloud247</title>
+  <link rel="icon" href="assets/favicon.svg?v=1.0.2" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=1.0.2">
+  <script defer src="assets/words.js?v=1.0.2"></script>
+  <script defer src="crypto-core.js?v=1.0.2"></script>
+  <script defer src="i18n.js?v=1.0.2"></script>
+  <script defer src="app.js?v=1.0.2"></script>
+</head>
+<body>
+  <a href="#generator" class="skip-link" data-i18n="skip">G&aring; til generatoren</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="cloud-brand" href="https://cloud247.no/" aria-label="Cloud247">
+        <img src="assets/cloud247-logo.svg?v=1.0.2" alt="Cloud247 Technology" width="1024" height="1024">
+      </a>
+      <div class="header-account">
+        <div class="language-switcher" role="group" aria-label="Language / Spr&aring;k">
+          <button class="is-active" type="button" data-language="no" title="Norsk" aria-pressed="true" lang="nb">NO</button>
+          <button type="button" data-language="en" title="English" aria-pressed="false" lang="en">EN</button>
+        </div>
+        <span class="header-label">Password Generator</span>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="shell hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">CLOUD TOOLBOX <span aria-hidden="true">/</span> <span data-i18n="security">SIKKERHET</span></p>
+          <h1><span class="hero-title-primary" data-i18n="heroTitle">Sterke passord.</span><br> <span class="hero-title-secondary" data-i18n="heroTagline">Helt enkelt.</span></h1>
+          <p class="hero-description" data-i18n="heroDescription">Lag passord, passfraser og PIN-koder p&aring; sekunder. Velg lengde og innhold &ndash; generer, kopier og bruk.</p>
+          <div class="hero-tags">
+            <span><span class="tiny-dot" aria-hidden="true"></span><span data-i18n="local">Genereres lokalt</span></span>
+            <span data-i18n="noAccount">Ingen konto</span>
+            <span data-i18n="noLogging">Ingen passordlogging</span>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="lock-emblem"><svg viewBox="0 0 80 88" fill="none"><path d="M22 37V25a18 18 0 0 1 36 0v12" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><rect x="12" y="36" width="56" height="43" rx="10" stroke="currentColor" stroke-width="5"/><circle cx="40" cy="55" r="5" fill="currentColor"/><path d="M40 59v7" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg></div>
+          <div class="art-label"><span class="tiny-dot"></span>WEB CRYPTO API</div>
+        </div>
+      </div>
+    </section>
+    <section class="generator-section" id="generator" aria-label="Password Generator">
+      <div class="shell">
+        <noscript><div class="notice error">JavaScript m&aring; v&aelig;re aktivert. JavaScript is required. No passwords can be generated without it.</div></noscript>
+        <div class="generator-grid">
+          <section class="panel settings-panel" aria-labelledby="settingsTitle">
+            <div class="panel-heading"><span class="step">1</span><div><p class="kicker" data-i18n="customize">TILPASS</p><h2 id="settingsTitle" data-i18n="settingsTitle">Dine innstillinger</h2></div></div>
+            <div class="mode-tabs" role="tablist" data-i18n-aria="modeLabel" aria-label="Type hemmelighet">
+              <button id="tab-password" role="tab" type="button" aria-selected="true" aria-controls="options-password" tabindex="0" data-mode="password" data-i18n="password">Passord</button>
+              <button id="tab-phrase" role="tab" type="button" aria-selected="false" aria-controls="options-phrase" tabindex="-1" data-mode="phrase" data-i18n="phrase">Passfrase</button>
+              <button id="tab-pin" role="tab" type="button" aria-selected="false" aria-controls="options-pin" tabindex="-1" data-mode="pin" data-i18n="pin">PIN-kode</button>
+            </div>
+            <div id="options-password" role="tabpanel" aria-labelledby="tab-password">
+              <div class="preset-row" role="group" data-i18n-aria="presets" aria-label="Hurtigvalg">
+                <button type="button" class="preset is-active" data-preset="standard" aria-pressed="true" data-i18n="presetStandard">Standard</button>
+                <button type="button" class="preset" data-preset="readable" aria-pressed="false" data-i18n="presetReadable">Lett &aring; lese</button>
+                <button type="button" class="preset" data-preset="long" aria-pressed="false" data-i18n="presetLong">Ekstra langt</button>
+              </div>
+              <div class="length-heading"><label for="passwordLength" data-i18n="length">Passordlengde</label><div class="number-unit"><input id="passwordLength" type="number" min="8" max="128" value="20" inputmode="numeric" autocomplete="off"><span data-i18n="characters">tegn</span></div></div>
+              <input id="passwordRange" class="range" type="range" min="8" max="128" value="20" data-i18n-aria="length" aria-label="Passordlengde">
+              <div class="range-labels"><span>8</span><span>128</span></div>
+              <fieldset class="character-fieldset"><legend data-i18n="characterTypes">Inkluder tegn</legend>
+                <div class="character-grid">
+                  <label class="check-card"><input id="upper" type="checkbox" checked><span><strong data-i18n="uppercase">Store bokstaver</strong><small>A&ndash;Z</small></span></label>
+                  <label class="check-card"><input id="lower" type="checkbox" checked><span><strong data-i18n="lowercase">Sm&aring; bokstaver</strong><small>a&ndash;z</small></span></label>
+                  <label class="check-card"><input id="digits" type="checkbox" checked><span><strong data-i18n="numbers">Tall</strong><small>0&ndash;9</small></span></label>
+                  <label class="check-card"><input id="symbols" type="checkbox" checked><span><strong data-i18n="symbols">Symboler</strong><small>! @ # $ %</small></span></label>
+                </div>
+              </fieldset>
+              <label class="switch-row"><span><strong data-i18n="excludeAmbiguous">Unng&aring; tegn som ligner</strong><small data-i18n="ambiguousHelp">Utelater I, l, 1, O, 0, o og |.</small></span><input id="excludeAmbiguous" type="checkbox" checked role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+              <p class="field-help" data-i18n="requiredGroups">Minst ett tegn fra hver valgt kategori er alltid med.</p>
+            </div>
+            <div id="options-phrase" role="tabpanel" aria-labelledby="tab-phrase" hidden>
+              <p class="mode-description" data-i18n="phraseDescription">Tilfeldige engelske ord, lettere &aring; skrive. Ordlisten ligger i appen, og ordene trekkes uavhengig.</p>
+              <div class="length-heading"><label for="phraseLength" data-i18n="wordCount">Antall ord</label><div class="number-unit"><input id="phraseLength" type="number" min="6" max="12" value="10" inputmode="numeric" autocomplete="off"><span data-i18n="words">ord</span></div></div>
+              <input id="phraseRange" class="range" type="range" min="6" max="12" value="10" data-i18n-aria="wordCount" aria-label="Antall ord">
+              <div class="range-labels"><span>6</span><span>12</span></div>
+              <label class="field"><span data-i18n="separator">Skilletegn</span><select id="separator"><option value="-" data-i18n="hyphen">Bindestrek (-)</option><option value="." data-i18n="period">Punktum (.)</option><option value=" " data-i18n="space">Mellomrom</option></select></label>
+              <label class="switch-row"><span><strong data-i18n="capitalize">Stor forbokstav</strong><small data-i18n="capitalizeHelp">Endrer lesbarheten, ikke entropien.</small></span><input id="capitalize" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+              <label class="switch-row"><span><strong data-i18n="addNumber">Legg til to tilfeldige sifre</strong><small data-i18n="addNumberHelp">Avslutter frasen med et tall fra 00 til 99.</small></span><input id="addNumber" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+              <p id="wordlistNote" class="field-help"></p>
+            </div>
+            <div id="options-pin" role="tabpanel" aria-labelledby="tab-pin" hidden>
+              <p class="mode-description" data-i18n="pinDescription">En tilfeldig tallkode. Innledende nuller beholdes, og sifre kan gjentas.</p>
+              <div class="length-heading"><label for="pinLength" data-i18n="pinDigits">Antall sifre</label><div class="number-unit"><input id="pinLength" type="number" min="4" max="12" value="6" inputmode="numeric" autocomplete="off"><span data-i18n="digitUnit">sifre</span></div></div>
+              <input id="pinRange" class="range" type="range" min="4" max="12" value="6" data-i18n-aria="pinDigits" aria-label="Antall sifre">
+              <div class="range-labels"><span>4</span><span>12</span></div>
+              <div class="notice"><strong data-i18n="pinWarningTitle">En PIN-kode er ikke et sterkt passord</strong><p data-i18n="pinWarning">Bruk bare PIN der tjenesten begrenser antall fors&oslash;k. Velg passord eller passfrase til kontoer.</p></div>
+            </div>
+            <div class="quantity-row"><label for="quantity" data-i18n="quantity">Antall &aring; generere</label><select id="quantity"><option value="1">1</option><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="50">50</option></select></div>
+            <p class="field-help" data-i18n="settingsAuto">Nye verdier genereres n&aring;r du endrer innstillingene.</p>
+          </section>
+          <section class="panel result-panel" aria-labelledby="resultTitle">
+            <div class="panel-heading"><span class="step">2</span><div><p class="kicker" data-i18n="result">RESULTAT</p><h2 id="resultTitle" data-i18n="resultTitle">Klart til bruk</h2></div><span class="local-badge"><span class="tiny-dot" aria-hidden="true"></span><span data-i18n="localBadge">LOKALT</span></span></div>
+            <div id="errorPanel" class="notice error" role="alert" hidden></div>
+            <div class="secret-card">
+              <div class="secret-card-heading"><span id="outputLabel" data-i18n="yourPassword">DITT NYE PASSORD</span><button id="toggleVisibility" class="secret-toggle" type="button" aria-pressed="false" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg><span data-i18n="hide">Skjul</span></button></div>
+              <pre id="passwordOutput" class="password-output empty" tabindex="0" data-i18n-aria="generatedValue" aria-label="Generert verdi" data-i18n="empty">Ingen verdi generert.</pre>
+              <div class="secret-card-footer"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4v5c0 5-8 9-8 9s-8-4-8-9V7l8-4Z"/><path d="m8 12 3 3 5-6"/></svg><span data-i18n="webCrypto">Tilfeldighet fra Web Crypto</span></span><span id="outputLength">&mdash;</span></div>
+            </div>
+            <div id="strengthSection" class="strength-section">
+              <div class="strength-heading"><strong id="strengthLabel">&mdash;</strong><span id="entropyValue">&mdash;</span></div>
+              <progress id="strengthMeter" max="128" value="0" data-i18n-aria="strength" aria-label="Beregnet styrke"></progress>
+              <p id="strengthHelp" class="field-help" data-i18n="entropyHelp">Beregnet fra de tilfeldige valgene, ikke et l&oslash;fte om tid til knekking.</p>
+            </div>
+            <div class="result-actions"><button id="generateButton" type="button" class="primary-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M19 11a7 7 0 0 0-12-5L4 9M5 13a7 7 0 0 0 12 5l3-3"/></svg><span data-i18n="generate">Generer nytt</span></button><button id="copyButton" type="button" class="secondary-button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span data-i18n="copy">Kopier</span></button></div>
+            <p class="clipboard-note" data-i18n="clipboardNote">Kopiering legger verdien p&aring; utklippstavlen. Appen sletter den ikke automatisk derfra.</p>
+            <div class="result-bottom"><span data-i18n="notSaved">Passordene lagres ikke av appen.</span><button id="clearButton" class="text-button" type="button" disabled data-i18n="clear">T&oslash;m resultat</button></div>
+          </section>
+        </div>
+        <section id="batchSection" class="panel batch-panel" aria-labelledby="batchTitle" hidden>
+          <div class="batch-heading"><div><p class="kicker" data-i18n="batch">FLERE VERDIER</p><h2 id="batchTitle" data-i18n="batchTitle">Alle genererte verdier</h2><p class="field-help" data-i18n="batchHelp">Listen inkluderer verdien over. Den lagres ikke og erstattes ved ny generering.</p></div><button id="copyAllButton" class="ghost-button" type="button" data-i18n="copyAll">Kopier alle</button></div>
+          <ol id="batchList" class="batch-list"></ol>
+        </section>
+        <div class="privacy-strip"><span class="privacy-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 8 4v5c0 5-8 9-8 9s-8-4-8-9V7l8-4Z"/><path d="m8 12 3 3 5-6"/></svg></span><p><strong data-i18n="privacyTitle">Hemmelighetene dine blir hos deg.</strong> <span data-i18n="privacyText">Ingen passord sendes til Cloud247 eller andre tjenester. Ingen analyseverkt&oslash;y, eksterne skript eller passordhistorikk.</span></p></div>
+      </div>
+    </section>
+    <section class="info-section" aria-labelledby="infoTitle"><div class="shell"><div class="section-title"><p class="kicker" data-i18n="goodHabits">GODE VANER</p><h2 id="infoTitle" data-i18n="infoTitle">Et godt passord er bare starten.</h2></div><div class="info-grid">
+      <article class="info-card"><span class="info-number">01</span><h3 data-i18n="uniqueTitle">Ett passord per konto</h3><p data-i18n="uniqueText">Lag en ny, unik verdi for hver tjeneste. Ikke gjenbruk passord mellom jobb og privat.</p></article>
+      <article class="info-card"><span class="info-number">02</span><h3 data-i18n="managerTitle">La en passordbehandler huske</h3><p data-i18n="managerText">Oppbevar passordene i en passordbehandler, ikke i et regneark eller en e-post.</p></article>
+      <article class="info-card"><span class="info-number">03</span><h3 data-i18n="mfaTitle">Bruk et ekstra sikkerhetslag</h3><p data-i18n="mfaText">Aktiver MFA, eller bruk passkeys der tjenesten st&oslash;tter det. Et passord beskytter ikke mot alt.</p></article>
+    </div>
+    <details class="technical-details"><summary data-i18n="technicalTitle">Hvordan fungerer generatoren?</summary><div><p data-i18n="technicalText">Appen bruker crypto.getRandomValues() og forkaster tall som ville gitt skjev fordeling. Valgte tegnkategorier er garantert representert. Entropien for passord tar hensyn til dette kravet. Passfraser bruker den faktiske st&oslash;rrelsen p&aring; den innebygde ordlisten.</p><p data-i18n="limitsText">Dette er ikke en passordbehandler eller en uavhengig sikkerhetsrevisjon. En kompromittert nettleser, utvidelse, enhet eller nettside kan lese resultatet. Vertstjenesten kan logge vanlige sidebes&oslash;k, men appen sender ikke de genererte verdiene.</p><p data-i18n="storageText">Bare spr&aring;kvalget kan lagres lokalt. T&oslash;m-knappen fjerner resultatene fra appen, ikke fra utklippstavlehistorikk eller skjermbilder, og garanterer ikke sikker overskriving av nettleserminne.</p></div></details>
+    </div></section>
+    <section class="more-tools-section"><div class="shell"><div class="more-tools-card"><div><p class="eyebrow">CLOUD TOOLBOX</p><h2 data-i18n="moreTitle">Flere verkt&oslash;y. Mindre friksjon.</h2><p data-i18n="moreText">Verkt&oslash;y for Microsoft 365, Intune, e-post og domenesikkerhet.</p></div><a class="tools-button" href="https://cloud247.no/" rel="noreferrer"><span data-i18n="moreButton">Se alle verkt&oslash;y</span><span aria-hidden="true">&rarr;</span></a></div></div></section>
+  </main>
+  <footer><div class="shell footer-inner"><span>&copy; <span id="year">2026</span> Cloud247</span><span class="footer-version">Password Generator <span id="version">v1.0.2</span></span><a href="https://cloud247.no/" rel="noreferrer">cloud247.no <span aria-hidden="true">&nearr;</span></a></div></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# Optional: Cloudflare Pages / hosts supporting this file. GitHub Pages ignores it.
+/*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'; frame-ancestors 'none'
+  Referrer-Policy: no-referrer
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), clipboard-read=(), clipboard-write=(self)
+/index.html
+  Cache-Control: no-cache
+/
+  Cache-Control: no-cache

@@ -1,0 +1,8 @@
+{
+  "name": "cloud247-password-generator",
+  "version": "1.0.2",
+  "private": true,
+  "description": "Cloud247 browser-only password, passphrase and PIN generator",
+  "scripts": { "test": "node --test tests/core.test.cjs" },
+  "engines": { "node": ">=20" }
+}
